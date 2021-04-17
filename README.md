@@ -1,0 +1,2 @@
+# discord_matumaru_bot
+Discordで特定の人数を募集するBot
