@@ -1,0 +1,4 @@
+discord_atumaru_bot:
+  build: .
+  environment:
+    - DISCORD_TOKEN

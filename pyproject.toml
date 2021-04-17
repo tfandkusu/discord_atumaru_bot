@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "discord_matumaru_bot"
+name = "discord_atumaru_bot"
 version = "0.1.0"
 description = "Discordで特定の人数を募集するBot"
 authors = ["Haruhiko Takada <haruhiko.takada@gmail.com>"]
