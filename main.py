@@ -1,11 +1,22 @@
-from flask import Flask
-app = Flask(__name__)
+import os
+import discord
 
 
-@app.route('/')
-def hello():
-    return 'Discord Atumaru Bot'
+client = discord.Client()
 
 
-if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=8080, debug=True)
+@client.event
+async def on_ready():
+    print('We have logged in as {0.user}'.format(client))
+
+
+@client.event
+async def on_message(message):
+    if message.author == client.user:
+        return
+
+    if message.content == 'ping':
+        await message.channel.send('pong')
+
+
+client.run(os.environ['DISCORD_TOKEN'])
