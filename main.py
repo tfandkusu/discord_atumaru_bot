@@ -1,6 +1,8 @@
 import os
 import discord
 
+BODY_TEXT = "参加したい人は👍リアクションを付けてください。"
+COUNT_TEXT = "現在参加希望者(%d人)"
 
 client = discord.Client()
 
@@ -14,9 +16,11 @@ async def on_ready():
 async def on_message(message):
     if message.author == client.user:
         return
-
-    if message.content == 'ping':
-        await message.channel.send('pong')
-
+    content = message.content
+    if content.startswith('/atumaru '):
+        recruiting = content[8:].strip()
+        # TODO 本文空白ケース
+        body = "%s\n%s" % (recruiting, BODY_TEXT)
+        await message.channel.send(body)
 
 client.run(os.environ['DISCORD_TOKEN'])
