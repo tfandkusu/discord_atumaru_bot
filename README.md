@@ -21,14 +21,16 @@ docker-compose run discord_atumaru_bot poetry run python main.py
 
 Artifact Registryに保存
 
+※ discord-atumaru-bot文字列は固有の環境のものなので適時置き換えてください。
+
 ```sh
 docker-compose build
 docker tag discord_atumaru_bot_discord_atumaru_bot:latest us-central1-docker.pkg.dev/discord-atumaru-bot/discord-atumaru-bot/image:latest
 docker push us-central1-docker.pkg.dev/discord-atumaru-bot/discord-atumaru-bot/image:latest
 ```
 
-## アップデート方法
+Compute Engineのコンテナを更新してインスタンスを再起動。
 
-まだ試していないが、こちらの方法でできそう。
-
-https://cloud.google.com/sdk/gcloud/reference/compute/instances/update-container?hl=ja
+```sh
+ gcloud compute instances update-container discord-atumaru-bot --container-image=us-central1-docker.pkg.dev/discord-atumaru-bot/discord-atumaru-bot/image:latest
+ ```
