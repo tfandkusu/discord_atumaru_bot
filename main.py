@@ -1,7 +1,20 @@
 import os
 import discord
 
+# コマンド名
+ATUMARU_BOT_ENV = os.environ['ATUMARU_BOT_ENV']
+if ATUMARU_BOT_ENV == 'dev':
+    COMMAND = '/atumarut'
+elif ATUMARU_BOT_ENV == 'prod':
+    COMMAND = '/atumaru'
+else:
+    raise "ATUMARU_BOT_ENV must be 'dev' or 'prod'"
+# 本文など
 BODY_TEXT = "参加したい人は👍リアクションを付けてください。"
+# 開発モードの時の本文
+if ATUMARU_BOT_ENV == 'dev':
+    BODY_TEXT = "（テストです）" + BODY_TEXT
+#
 COUNT_TEXT = "現在参加希望者(%d人)\n"
 HELP_HEAD = "使い方"
 HELP_MESSAGE = """
@@ -30,12 +43,12 @@ async def on_message(message):
         return
     # メッセージは前後の空白が自動で除去される
     content = message.content
-    if content.startswith('/atumaru '):
+    if content.startswith(COMMAND + ' '):
         # 募集文掲載
-        recruiting = content[8:]
+        recruiting = content[len(COMMAND):]
         body = "%s\n%s" % (recruiting, BODY_TEXT)
         await message.channel.send(body)
-    elif content == '/atumaru':
+    elif content == COMMAND:
         # ヘルプ表示
         body = HELP_MESSAGE
         await message.channel.send(body)

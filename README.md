@@ -3,6 +3,13 @@ Discordで特定の人数を募集するBot
 
 ## 実行方法
 
+### 環境変数の設定
+
+| 環境変数 | 説明 |
+| --- | --- |
+| ATUMARU_BOT_ENV | prod: 本番モード。コマンド名は/atumaru。dev:開発モード。コマンド名は/atumarut |
+| DISCORD_TOKEN | Discordのトークン |
+
 ### ローカル
 
 ```sh
