@@ -23,7 +23,7 @@ jobs:
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
           service_account_key: ${{ secrets.GCP_SA_KEY }}
-        export_default_credentials: true
+          export_default_credentials: true
       # DockerとArtifact Registoryの認証
       - run: gcloud auth configure-docker us-central1-docker.pkg.dev
       # DockerコンテナのビルドとPUSHを行う
