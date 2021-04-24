@@ -34,4 +34,4 @@ jobs:
           push: true
           tags: ${{ secrets.IMAGE_TAG }}
       # Compute Engineの再起動
-      - run: gcloud compute instances update-container ${{ secrets.GCP_PROJECT_ID }} --container-image=${{ secrets.IMAGE_TAG }}
+      - run: gcloud compute instances update-container ${{ secrets.GCP_PROJECT_ID }} --container-image=${{ secrets.IMAGE_TAG }} --zone us-central1-a
