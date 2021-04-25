@@ -49,7 +49,8 @@ async def on_message(message):
         if ATUMARU_BOT_ENV == ATUMARU_BOT_ENV_DEV:
             recruiting = TEST_TAG + recruiting
         body = "%s\n%s" % (recruiting, BODY_TEXT)
-        await message.channel.send(body)
+        message = await message.channel.send(body)
+        await message.add_reaction('👍')
     elif content == COMMAND:
         # ヘルプ表示
         body = HELP_MESSAGE
@@ -81,11 +82,14 @@ async def on_reaction_update(reaction, user):
     # 編集後のメッセージ文字列を生成して
     lines = message.content.splitlines()
     content = "%s\n%s" % (lines[0], lines[1])
-    if reaction.count >= 1:
+    if reaction.count >= 2:
         content += "\n\n"
-        content += COUNT_TEXT % reaction.count
+        # 現在参加希望者(N人)
+        content += COUNT_TEXT % (reaction.count - 1)
+        # 参加者一覧
         async for user in reaction.users():
-            content += "%s\n" % user.mention
+            if user != client.user:
+                content += "%s\n" % user.mention
     # メッセージを編集する
     await message.edit(content=content)
 
