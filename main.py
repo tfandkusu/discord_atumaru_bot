@@ -84,7 +84,9 @@ async def on_reaction_update(reaction, user):
     content = "%s\n%s" % (lines[0], lines[1])
     if reaction.count >= 2:
         content += "\n\n"
-        content += COUNT_TEXT % reaction.count
+        # 現在参加希望者(N人)
+        content += COUNT_TEXT % (reaction.count - 1)
+        # 参加者一覧
         async for user in reaction.users():
             if user != client.user:
                 content += "%s\n" % user.mention
