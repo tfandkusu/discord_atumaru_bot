@@ -45,7 +45,7 @@ async def on_message(message):
     if content.startswith(COMMAND + ' '):
         # 募集文掲載
         recruiting = content[len(COMMAND):]
-        # テストモードの時はテストタグを追加
+        # テストモードの時は【テスト】を追加
         if ATUMARU_BOT_ENV == ATUMARU_BOT_ENV_DEV:
             recruiting = TEST_TAG + recruiting
         body = "%s\n%s" % (recruiting, BODY_TEXT)
