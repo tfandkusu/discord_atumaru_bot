@@ -1,20 +1,19 @@
 import os
 import discord
 
+ATUMARU_BOT_ENV_DEV = "dev"
+ATUMARU_BOT_ENV_PROD = "prod"
 # コマンド名
 ATUMARU_BOT_ENV = os.environ['ATUMARU_BOT_ENV']
-if ATUMARU_BOT_ENV == 'dev':
-    COMMAND = '/atumarut'
-elif ATUMARU_BOT_ENV == 'prod':
+if ATUMARU_BOT_ENV == ATUMARU_BOT_ENV_DEV:
+    COMMAND = '/atumaru_test'
+elif ATUMARU_BOT_ENV == ATUMARU_BOT_ENV_PROD:
     COMMAND = '/atumaru'
 else:
     raise "ATUMARU_BOT_ENV must be 'dev' or 'prod'"
 # 本文など
+TEST_TAG = "【テスト】"
 BODY_TEXT = "参加したい人は👍リアクションを付けてください。"
-# 開発モードの時の本文
-if ATUMARU_BOT_ENV == 'dev':
-    BODY_TEXT = "（テストです）" + BODY_TEXT
-#
 COUNT_TEXT = "現在参加希望者(%d人)\n"
 HELP_HEAD = "使い方"
 HELP_MESSAGE = """
@@ -46,6 +45,9 @@ async def on_message(message):
     if content.startswith(COMMAND + ' '):
         # 募集文掲載
         recruiting = content[len(COMMAND):]
+        # テストモードの時は【テスト】を追加
+        if ATUMARU_BOT_ENV == ATUMARU_BOT_ENV_DEV:
+            recruiting = TEST_TAG + recruiting
         body = "%s\n%s" % (recruiting, BODY_TEXT)
         await message.channel.send(body)
     elif content == COMMAND:
@@ -63,6 +65,16 @@ async def on_reaction_update(reaction, user):
     # ヘルプ表示ではなく
     if message.content.startswith(HELP_HEAD):
         return
+    # 【テスト】メッセージに対して
+    if message.content.startswith(TEST_TAG):
+        # テスト環境で無い
+        if ATUMARU_BOT_ENV != ATUMARU_BOT_ENV_DEV:
+            return
+    # 【テスト】と付いてないメッセージに対して
+    if message.content.startswith(TEST_TAG) == False:
+        # 本番環境で無い
+        if ATUMARU_BOT_ENV != ATUMARU_BOT_ENV_PROD:
+            return
     # 👍リアクションの時は
     if reaction.emoji != '👍':
         return
