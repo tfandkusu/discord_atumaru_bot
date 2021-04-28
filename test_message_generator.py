@@ -36,10 +36,6 @@ class TestMessageGenerator(unittest.TestCase):
         self.assertEqual(content, None)
         self.assertFalse(reaction)
 
-    def test_failed(self):
-        "わざと失敗するテスト入れる"
-        self.assertFalse(true)
-
 
 if __name__ == '__main__':
     unittest.main()
