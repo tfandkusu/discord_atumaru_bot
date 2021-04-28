@@ -27,7 +27,7 @@ def make_command_message(test_flag, content):
     # コマンドに対応したメッセージ
     if content.startswith(command + ' '):
         # 募集文掲載
-        recruiting = content[len(command):]
+        recruiting = content[(len(command) + 1):]
         # テストモードの時は【テスト】を追加
         if test_flag:
             recruiting = TEST_TAG + recruiting
