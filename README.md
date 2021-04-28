@@ -7,7 +7,7 @@ Discordで特定の人数を募集するBot
 
 | 環境変数 | 説明 |
 | --- | --- |
-| ATUMARU_BOT_ENV | prod: 本番モード。コマンド名は/atumaru。dev:開発モード。コマンド名は/atumarut |
+| ATUMARU_BOT_ENV | prod: 本番モード。コマンド名は/atumaru。dev:テストモード。コマンド名は/atumaru_test |
 | DISCORD_TOKEN | Discordのトークン |
 
 ### ローカル
