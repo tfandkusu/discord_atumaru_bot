@@ -1,0 +1,31 @@
+# ワークフローの名前
+name: test
+# ワークフロー実行タイミングは
+on:
+  # mainブランチへのPUSH
+  push:
+    branches:
+      - main
+  # プルリクの作成と更新
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+jobs:
+  check: # job名
+    # ubuntuで動かす
+    runs-on: ubuntu-latest
+    steps:
+      # 該当ブランチをチェックアウトする
+      - uses: actions/checkout@v2
+      # Python環境を構築する
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      # Poetryをインストールする
+      - run: pip install poetry
+      # ライブラリをインストールする
+      - run: poetry install
+      # 単体テストを実行する
+      - run: poetry run python -m unittest
