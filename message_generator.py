@@ -49,7 +49,7 @@ def make_reaction_update_message(test_flag, content, user_mentions,
     contentは現在投稿メッセージ。user_mentionsは現在リアクションを付けたユーザのmention文字列一覧。
     Bot自身のそれは除く。
     返却は編集後のメッセージ。Noneの時はなにもしない。
-    sep 5人いるときは、2vs2のマッチング表を出力する
+    sep_flagがTrueで5人いるときは、2vs2のマッチング表を出力する。
     """
     # ヘルプ表示ではなく
     if content.startswith(HELP_HEAD):

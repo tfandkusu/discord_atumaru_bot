@@ -17,6 +17,7 @@ def is_test_mode():
 
 
 def is_sep():
+    "SEP向けならばTrueを返却する"
     return ATUMARU_BOT_SEP is not None
 
 
@@ -70,7 +71,7 @@ async def on_reaction_update(reaction, user):
         test_flag=is_test_mode(),
         content=message.content,
         user_mentions=user_mentions,
-        sep=is_sep())
+        sep_flag=is_sep())
     # メッセージを編集する
     if edited != None:
         await message.edit(content=edited)
