@@ -36,6 +36,38 @@ class TestMessageGenerator(unittest.TestCase):
         self.assertEqual(content, None)
         self.assertFalse(reaction)
 
+    def test_reaction_to_help(self):
+        "ヘルプへのリアクションケース"
+        content = "使い方\n```"
+        edited = mg.make_reaction_update_message(False, content, [])
+        self.assertEqual(edited, None)
+
+    def test_reaction_to_dev_in_prod(self):
+        "本番モードで【テスト】とついているメッセージにリアクション"
+        content = "【テスト】募集文"
+        edited = mg.make_reaction_update_message(False, content, [])
+        self.assertEqual(edited, None)
+
+    def test_reaction_to_prod_in_dev(self):
+        "テストモードで【テスト】とついていないメッセージにリアクション"
+        content = "募集文"
+        edited = mg.make_reaction_update_message(True, content, [])
+        self.assertEqual(edited, None)
+
+    def test_reaction(self):
+        "リアクションに反応するケース"
+        content = "募集文\n参加したい人は👍リアクションを付けてください。"
+        edited = mg.make_reaction_update_message(
+            False, content, ["<@1234>", "<@5678>"])
+        expected = """募集文
+参加したい人は👍リアクションを付けてください。
+
+現在参加希望者(2人)
+<@1234>
+<@5678>
+"""
+        self.assertEqual(edited, expected)
+
 
 if __name__ == '__main__':
     unittest.main()
