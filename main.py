@@ -8,11 +8,16 @@ ATUMARU_BOT_ENV_PROD = "prod"
 ATUMARU_BOT_ENV = os.environ['ATUMARU_BOT_ENV']
 if ATUMARU_BOT_ENV != ATUMARU_BOT_ENV_DEV and ATUMARU_BOT_ENV != ATUMARU_BOT_ENV_PROD:
     raise "ATUMARU_BOT_ENV must be 'dev' or 'prod'"
+ATUMARU_BOT_SEP = os.environ.get('ATUMARU_BOT_SEP')
 
 
 def is_test_mode():
     "テストモードならばTrueを返却する"
     return ATUMARU_BOT_ENV == ATUMARU_BOT_ENV_DEV
+
+
+def is_sep():
+    return ATUMARU_BOT_SEP is not None
 
 
 # リアクション削除の取得に必要
@@ -64,7 +69,8 @@ async def on_reaction_update(reaction, user):
     edited = mg.make_reaction_update_message(
         test_flag=is_test_mode(),
         content=message.content,
-        user_mentions=user_mentions)
+        user_mentions=user_mentions,
+        sep=is_sep())
     # メッセージを編集する
     if edited != None:
         await message.edit(content=edited)
