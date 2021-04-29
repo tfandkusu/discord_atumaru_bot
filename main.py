@@ -1,27 +1,19 @@
 import os
 import discord
+import message_generator as mg
 
 ATUMARU_BOT_ENV_DEV = "dev"
 ATUMARU_BOT_ENV_PROD = "prod"
-# コマンド名
+# 環境を確認
 ATUMARU_BOT_ENV = os.environ['ATUMARU_BOT_ENV']
-if ATUMARU_BOT_ENV == ATUMARU_BOT_ENV_DEV:
-    COMMAND = '/atumaru_test'
-elif ATUMARU_BOT_ENV == ATUMARU_BOT_ENV_PROD:
-    COMMAND = '/atumaru'
-else:
+if ATUMARU_BOT_ENV != ATUMARU_BOT_ENV_DEV and ATUMARU_BOT_ENV != ATUMARU_BOT_ENV_PROD:
     raise "ATUMARU_BOT_ENV must be 'dev' or 'prod'"
-# 本文など
-TEST_TAG = "【テスト】"
-BODY_TEXT = "参加したい人は👍リアクションを付けてください。"
-COUNT_TEXT = "現在参加希望者(%d人)\n"
-HELP_HEAD = "使い方"
-HELP_MESSAGE = """
-使い方
-```
-/atumaru 募集文
-```
-"""
+
+
+def is_test_mode():
+    "テストモードならばTrueを返却する"
+    return ATUMARU_BOT_ENV == ATUMARU_BOT_ENV_DEV
+
 
 # リアクション削除の取得に必要
 intents = discord.Intents.default()
@@ -42,19 +34,16 @@ async def on_message(message):
         return
     # メッセージは前後の空白が自動で除去される
     content = message.content
-    if content.startswith(COMMAND + ' '):
-        # 募集文掲載
-        recruiting = content[len(COMMAND):]
-        # テストモードの時は【テスト】を追加
-        if ATUMARU_BOT_ENV == ATUMARU_BOT_ENV_DEV:
-            recruiting = TEST_TAG + recruiting
-        body = "%s\n%s" % (recruiting, BODY_TEXT)
+    # 投稿文を作成する
+    body, reaction_flag = mg.make_command_message(
+        test_flag=is_test_mode(),
+        content=content)
+    # 投稿文があれば投稿する
+    if body != None:
         message = await message.channel.send(body)
-        await message.add_reaction('👍')
-    elif content == COMMAND:
-        # ヘルプ表示
-        body = HELP_MESSAGE
-        await message.channel.send(body)
+        # リアクションを必要に応じて付ける
+        if reaction_flag:
+            await message.add_reaction('👍')
 
 
 async def on_reaction_update(reaction, user):
@@ -63,35 +52,22 @@ async def on_reaction_update(reaction, user):
     # Botが書いたメッセージに対して
     if message.author != client.user:
         return
-    # ヘルプ表示ではなく
-    if message.content.startswith(HELP_HEAD):
-        return
-    # 【テスト】メッセージに対して
-    if message.content.startswith(TEST_TAG):
-        # テスト環境で無い
-        if ATUMARU_BOT_ENV != ATUMARU_BOT_ENV_DEV:
-            return
-    # 【テスト】と付いてないメッセージに対して
-    if message.content.startswith(TEST_TAG) == False:
-        # 本番環境で無い
-        if ATUMARU_BOT_ENV != ATUMARU_BOT_ENV_PROD:
-            return
     # 👍リアクションの時は
     if reaction.emoji != '👍':
         return
-    # 編集後のメッセージ文字列を生成して
-    lines = message.content.splitlines()
-    content = "%s\n%s" % (lines[0], lines[1])
-    if reaction.count >= 2:
-        content += "\n\n"
-        # 現在参加希望者(N人)
-        content += COUNT_TEXT % (reaction.count - 1)
-        # 参加者一覧
-        async for user in reaction.users():
-            if user != client.user:
-                content += "%s\n" % user.mention
+    # メンション一覧
+    user_mentions = []
+    async for user in reaction.users():
+        if user != client.user:
+            user_mentions.append(user.mention)
+    # 編集後メッセージ作成
+    edited = mg.make_reaction_update_message(
+        test_flag=is_test_mode(),
+        content=message.content,
+        user_mentions=user_mentions)
     # メッセージを編集する
-    await message.edit(content=content)
+    if edited != None:
+        await message.edit(content=edited)
 
 
 @client.event
