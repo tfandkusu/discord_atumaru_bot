@@ -1,4 +1,5 @@
 "メッセージ作成"
+import sep
 
 TEST_TAG = "【テスト】"
 BODY_TEXT = "参加したい人は👍リアクションを付けてください。"
@@ -41,12 +42,14 @@ def make_command_message(test_flag, content):
         return None, False
 
 
-def make_reaction_update_message(test_flag, content, user_mentions):
+def make_reaction_update_message(test_flag, content, user_mentions,
+                                 sep_flag=False):
     """
     Botの投稿メッセージに対するリアクションに反応する
     contentは現在投稿メッセージ。user_mentionsは現在リアクションを付けたユーザのmention文字列一覧。
     Bot自身のそれは除く。
     返却は編集後のメッセージ。Noneの時はなにもしない。
+    sep_flagがTrueで5人いるときは、2vs2のマッチング表を出力する。
     """
     # ヘルプ表示ではなく
     if content.startswith(HELP_HEAD):
@@ -71,4 +74,7 @@ def make_reaction_update_message(test_flag, content, user_mentions):
         # 参加者一覧
         for mention in user_mentions:
             edited += "%s\n" % mention
+    if sep_flag and len(user_mentions) == 5:
+        # SEP向けマッチング表出力
+        edited += sep.make_matching(user_mentions)
     return edited
