@@ -60,7 +60,7 @@ def make_reaction_update_message(test_flag, content,
                                  ok_user_mentions,
                                  sep_flag=False):
     """
-    Botの投稿メッセージに対するリアクションに反応して編集投稿メッセージを作成する。
+    Botの投稿メッセージに対するリアクションに反応して編集済みメッセージを作成する。
     contentは現在投稿メッセージ。user_mentionsは現在リアクションを付けたユーザのmention文字列一覧。
     Bot自身のそれは除く。
     返却は編集後のメッセージ。Noneの時はなにもしない。
@@ -92,7 +92,7 @@ def make_reaction_update_message(test_flag, content,
             owner = get_owner_mention(line)
             break
     # 削除判定
-    if owner in trash_user_mentions and ok_user_mentions:
+    if owner in trash_user_mentions and owner in ok_user_mentions:
         # 削除する
         return ""
     # 削除ではない
