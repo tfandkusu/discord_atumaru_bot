@@ -7,7 +7,7 @@ class TestMessageGenerator(unittest.TestCase):
         "本番モードで募集"
         content, reaction = mg.make_command_message(False, '/atumaru 募集します')
         self.assertEqual(content,
-                         "募集します\n参加したい人は👍リアクションを付けてください。")
+                         "@everyone 募集します\n参加したい人は👍リアクションを付けてください。")
         self.assertTrue(reaction)
 
     def test_help_prod(self):
@@ -21,7 +21,7 @@ class TestMessageGenerator(unittest.TestCase):
         content, reaction = mg.make_command_message(
             True, '/atumaru_test 募集します')
         self.assertEqual(content,
-                         "【テスト】募集します\n参加したい人は👍リアクションを付けてください。")
+                         "【テスト】@everyone 募集します\n参加したい人は👍リアクションを付けてください。")
         self.assertTrue(reaction)
 
     def test_help_dev(self):
@@ -44,22 +44,22 @@ class TestMessageGenerator(unittest.TestCase):
 
     def test_reaction_to_dev_in_prod(self):
         "本番モードで【テスト】とついているメッセージにリアクション"
-        content = "【テスト】募集文"
+        content = "【テスト】@everyone 募集文"
         edited = mg.make_reaction_update_message(False, content, [])
         self.assertEqual(edited, None)
 
     def test_reaction_to_prod_in_dev(self):
         "テストモードで【テスト】とついていないメッセージにリアクション"
-        content = "募集文"
+        content = "@everyone 募集文"
         edited = mg.make_reaction_update_message(True, content, [])
         self.assertEqual(edited, None)
 
     def test_reaction(self):
         "リアクションに反応するケース"
-        content = "募集文\n参加したい人は👍リアクションを付けてください。"
+        content = "@everyone 募集文\n参加したい人は👍リアクションを付けてください。"
         edited = mg.make_reaction_update_message(
             False, content, ["<@1234>", "<@5678>"])
-        expected = """募集文
+        expected = """@everyone 募集文
 参加したい人は👍リアクションを付けてください。
 
 現在参加希望者(2人)
@@ -70,11 +70,11 @@ class TestMessageGenerator(unittest.TestCase):
 
     def test_sep(self):
         "SEPモードの確認"
-        content = "募集文\n参加したい人は👍リアクションを付けてください。"
+        content = "@everyone 募集文\n参加したい人は👍リアクションを付けてください。"
         edited = mg.make_reaction_update_message(
             False, content, ["<@1>", "<@2>", "<@3>", "<@4>", "<@5>"],
             sep_flag=True)
-        expected = """募集文
+        expected = """@everyone 募集文
 参加したい人は👍リアクションを付けてください。
 
 現在参加希望者(5人)
@@ -95,11 +95,11 @@ class TestMessageGenerator(unittest.TestCase):
 
     def test_sep_disabled(self):
         "SEPモード無効化ケース"
-        content = "募集文\n参加したい人は👍リアクションを付けてください。"
+        content = "@everyone 募集文\n参加したい人は👍リアクションを付けてください。"
         edited = mg.make_reaction_update_message(
             False, content, ["<@1>", "<@2>", "<@3>", "<@4>", "<@5>"],
             sep_flag=False)
-        expected = """募集文
+        expected = """@everyone 募集文
 参加したい人は👍リアクションを付けてください。
 
 現在参加希望者(5人)
