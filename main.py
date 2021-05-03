@@ -42,6 +42,7 @@ async def on_message(message):
     content = message.content
     # 投稿文を作成する
     body, reaction_flag = mg.make_command_message(
+        auther_menthon=message.author.mention,
         test_flag=is_test_mode(),
         content=content)
     # 投稿文があれば投稿する
@@ -50,6 +51,8 @@ async def on_message(message):
         # リアクションを必要に応じて付ける
         if reaction_flag:
             await message.add_reaction('👍')
+            await message.add_reaction('🔑')
+            await message.add_reaction('🗑')
 
 
 async def on_reaction_update(reaction, user):
@@ -58,22 +61,37 @@ async def on_reaction_update(reaction, user):
     # Botが書いたメッセージに対して
     if message.author != client.user:
         return
-    # 👍リアクションの時は
-    if reaction.emoji != '👍':
-        return
-    # メンション一覧
+    # 👍付けた人のメンション一覧
     user_mentions = []
-    async for user in reaction.users():
-        if user != client.user:
-            user_mentions.append(user.mention)
+    # 🔑付けた人のメンション一覧
+    key_user_mentions = []
+    # 🗑付けた人のメンション一覧
+    trash_user_mentions = []
+    # 対象の現在リアクションをすべて取得
+    for reaction in message.reactions:
+        # リアクションのユーザ一覧
+        async for user in reaction.users():
+            if user != client.user:
+                # Bot以外
+                if reaction.emoji == '👍':
+                    user_mentions.append(user.mention)
+                elif reaction.emoji == '🔑':
+                    key_user_mentions.append(user.mention)
+                elif reaction.emoji == '🗑':
+                    trash_user_mentions.append(user.mention)
     # 編集後メッセージ作成
     edited = mg.make_reaction_update_message(
         test_flag=is_test_mode(),
         content=message.content,
         user_mentions=user_mentions,
+        key_user_mentions=key_user_mentions,
+        trash_user_mentions=trash_user_mentions,
         sep_flag=is_sep())
-    # メッセージを編集する
-    if edited != None:
+    if edited == '':
+        # 削除する
+        await message.delete()
+    elif edited != None:
+        # メッセージを編集する
         await message.edit(content=edited)
 
 
