@@ -47,6 +47,10 @@ def make_command_message(test_flag, auther_menthon, content):
 
 
 def get_owner_mention(line):
+    """
+    起案者 <@123> は🔑と🗑リアクションで削除出来ます。
+    の<@123>の部分を抽出する
+    """
     return line[len(BODY_TEXT_2) + 1:-(len(BODY_TEXT_3) + 1)]
 
 
@@ -78,16 +82,18 @@ def make_reaction_update_message(test_flag, content,
             return None
     # 編集後のメッセージ文字列を生成して
     lines = content.splitlines()
-    # 起案者までを使い回す。
+    # 「起案者」で始まる行までを使い回す。
     edited = ""
     owner = ""
     for line in lines:
         edited += line + "\n"
         if line.startswith(BODY_TEXT_2):
+            # 起案者のメンションを取得する
             owner = get_owner_mention(line)
             break
     # 削除判定
     if owner in key_user_mentions and owner in trash_user_mentions:
+        # 削除する
         return ""
     # 削除ではない
     if len(user_mentions) >= 1:

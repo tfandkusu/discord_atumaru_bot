@@ -67,7 +67,7 @@ async def on_reaction_update(reaction, user):
     key_user_mentions = []
     # 🗑付けた人のメンション一覧
     trash_user_mentions = []
-    # 対象の現在リアクションをすべて取得
+    # メッセージについているリアクションをすべて取得
     for reaction in message.reactions:
         # リアクションのユーザ一覧
         async for user in reaction.users():
