@@ -4,7 +4,7 @@ import sep
 TEST_TAG = "【テスト】"
 BODY_TEXT_1 = "参加したい人は👍リアクションを付けてください。"
 BODY_TEXT_2 = "起案者"
-BODY_TEXT_3 = "は🔑と🗑リアクションで削除出来ます。"
+BODY_TEXT_3 = "は🗑と🆗リアクションで削除出来ます。"
 HELP_HEAD = "使い方"
 HELP_MESSAGE = """
 使い方
@@ -48,7 +48,7 @@ def make_command_message(test_flag, auther_menthon, content):
 
 def get_owner_mention(line):
     """
-    起案者 <@123> は🔑と🗑リアクションで削除出来ます。
+    起案者 <@123> は🗑と🆗リアクションで削除出来ます。
     の<@123>の部分を抽出する
     """
     return line[len(BODY_TEXT_2) + 1:-(len(BODY_TEXT_3) + 1)]
@@ -56,8 +56,8 @@ def get_owner_mention(line):
 
 def make_reaction_update_message(test_flag, content,
                                  user_mentions,
-                                 key_user_mentions,
                                  trash_user_mentions,
+                                 ok_user_mentions,
                                  sep_flag=False):
     """
     Botの投稿メッセージに対するリアクションに反応して編集投稿メッセージを作成する。
@@ -92,7 +92,7 @@ def make_reaction_update_message(test_flag, content,
             owner = get_owner_mention(line)
             break
     # 削除判定
-    if owner in key_user_mentions and owner in trash_user_mentions:
+    if owner in trash_user_mentions and ok_user_mentions:
         # 削除する
         return ""
     # 削除ではない
