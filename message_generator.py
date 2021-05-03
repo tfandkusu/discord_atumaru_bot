@@ -29,6 +29,8 @@ def make_command_message(test_flag, content):
     if content.startswith(command + ' '):
         # 募集文掲載
         recruiting = content[(len(command) + 1):]
+        # @everyoneを付ける
+        recruiting = '@everyone ' + recruiting
         # テストモードの時は【テスト】を追加
         if test_flag:
             recruiting = TEST_TAG + recruiting
