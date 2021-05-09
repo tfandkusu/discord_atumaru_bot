@@ -1,5 +1,8 @@
-# discord_atumaru_bot
-Discordで特定の人数を募集するBot
+# 集まるBot
+
+Discordで参加者を募集するBot。ワンクリックで募集案件への応募が可能。
+
+<img src="https://user-images.githubusercontent.com/16898831/117563187-259a5900-b0df-11eb-99bf-875b90311afd.gif">
 
 ## 実行方法
 
@@ -24,20 +27,22 @@ docker-compose build
 docker-compose run discord_atumaru_bot poetry run python main.py
 ```
 
-## デプロイ方法
+## 使用技術
 
-Artifact Registryに保存
 
-※ discord-atumaru-bot文字列は固有の環境のものなので適時置き換えてください。
+- Python
+- [discord.py](https://discordpy.readthedocs.io/ja/latest/index.html)
+- [Poetry](https://python-poetry.org/)
+- [GitHub Actions](https://docs.github.com/ja/actions)
+- Docker
+- [Google Compute Engine](https://cloud.google.com/compute/?hl=ja)
+- [Google Artifact Registory](https://cloud.google.com/artifact-registry?hl=ja)
 
-```sh
-docker-compose build
-docker tag discord_atumaru_bot_discord_atumaru_bot:latest us-central1-docker.pkg.dev/discord-atumaru-bot/discord-atumaru-bot/image:latest
-docker push us-central1-docker.pkg.dev/discord-atumaru-bot/discord-atumaru-bot/image:latest
-```
+## デプロイについて
 
-Compute Engineのコンテナを更新してインスタンスを再起動。
+[Google Cloud Platform](https://cloud.google.com/free/?hl=ja)の無料枠で100人規模のサーバでの動作を確認しています。
 
-```sh
- gcloud compute instances update-container discord-atumaru-bot --container-image=us-central1-docker.pkg.dev/discord-atumaru-bot/discord-atumaru-bot/image:latest
- ```
+## 謝辞
+
+[SEP](https://hageyuto.com/2679-2/)の代表および皆様に導入と動作確認へのご協力を頂きました。ありがとうございます。
+
