@@ -110,4 +110,4 @@ async def on_reaction_remove(reaction, user):
 # 環境変数からトークンを得る
 token = os.environ['DISCORD_TOKEN']
 # 実行する
-client.run(token)
+client.run(token, reconnect=False)
