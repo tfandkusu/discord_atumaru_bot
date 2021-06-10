@@ -1,4 +1,7 @@
-discord_atumaru_bot:
-  build: .
-  environment:
-    - DISCORD_TOKEN
+version: "2"
+services:
+  discord_atumaru_bot:
+    build: .
+    environment:
+      - DISCORD_TOKEN
+      - ATUMARU_BOT_ENV
