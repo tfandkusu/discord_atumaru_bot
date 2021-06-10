@@ -1,5 +1,6 @@
 import os
 import discord
+from retrying import retry
 import message_generator as mg
 
 ATUMARU_BOT_ENV_DEV = "dev"
@@ -109,5 +110,30 @@ async def on_reaction_remove(reaction, user):
 
 # 環境変数からトークンを得る
 token = os.environ['DISCORD_TOKEN']
-# 実行する
-client.run(token, reconnect=False)
+
+
+def on_exception(e):
+    print(e)
+    return True
+
+
+class BotTask:
+
+    def __init__(self):
+        # start関数が呼ばれた回数
+        self.start_count = 0
+
+    # 合計4時間待つ
+    # 最初は10秒待つ。失敗したらインターバルを2倍にする。
+    # 合計4時間が経ってしまったら、例外を再度raiseする
+    # 毎回の例外は標準出力する
+    @retry(stop_max_delay=4*60*60*1000, wait_exponential_multiplier=5000,
+           wrap_exception=True, retry_on_exception=on_exception)
+    def start(self):
+        print("start %d" % self.start_count)
+        self.start_count += 1
+        client.run(token, reconnect=False)
+
+
+task = BotTask()
+task.start()
