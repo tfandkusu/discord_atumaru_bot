@@ -43,7 +43,7 @@ class BotTask:
                 print(e)
                 # エラーが発生したときは
                 print("retry %d" % self.retry_count)
-                # 2のリトライ回数乗×5秒まつ
+                # 2のリトライ回数乗×5秒待つ
                 interval = 5*2**self.retry_count
                 print("interval %d" % interval)
                 # 待ち時間が4時間超えたら、スクリプトを終了する
