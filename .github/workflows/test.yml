@@ -29,12 +29,7 @@ jobs:
       - run: poetry install
       # フォーマットを確認する
       - run: poetry run black . --check
-      # lintをPRに投稿
-      - name: flake8 Lint
-        uses: reviewdog/action-flake8@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          reporter: "github-pr-review"
-          flake8_args: "--max-line-length 88 --extend-ignore E203"
+      # lintを確認する
+      - run: poetry run pflake8
       # 単体テストを実行する
       - run: poetry run python -m unittest
