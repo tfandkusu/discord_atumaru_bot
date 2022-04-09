@@ -7,10 +7,10 @@ import time
 ATUMARU_BOT_ENV_DEV = "dev"
 ATUMARU_BOT_ENV_PROD = "prod"
 # 環境を確認
-ATUMARU_BOT_ENV = os.environ['ATUMARU_BOT_ENV']
+ATUMARU_BOT_ENV = os.environ["ATUMARU_BOT_ENV"]
 if ATUMARU_BOT_ENV != ATUMARU_BOT_ENV_DEV and ATUMARU_BOT_ENV != ATUMARU_BOT_ENV_PROD:
     raise "ATUMARU_BOT_ENV must be 'dev' or 'prod'"
-ATUMARU_BOT_SEP = os.environ.get('ATUMARU_BOT_SEP')
+ATUMARU_BOT_SEP = os.environ.get("ATUMARU_BOT_SEP")
 
 
 def is_test_mode():
@@ -44,10 +44,10 @@ class BotTask:
                 # エラーが発生したときは
                 print("retry %d" % self.retry_count)
                 # 2のリトライ回数乗×5秒待つ
-                interval = 5*2**self.retry_count
+                interval = 5 * 2**self.retry_count
                 print("interval %d" % interval)
                 # 待ち時間が4時間超えたら、スクリプトを終了する
-                if interval >= 4*60*60:
+                if interval >= 4 * 60 * 60:
                     break
                 time.sleep(interval)
 
@@ -55,7 +55,7 @@ class BotTask:
         # クライアントを作成
         client = self._make_client()
         # 環境変数からトークンを得る
-        token = os.environ['DISCORD_TOKEN']
+        token = os.environ["DISCORD_TOKEN"]
         # Botを実行
         client.run(token, reconnect=False)
 
@@ -74,7 +74,7 @@ class BotTask:
         async def on_ready():
             # 接続出来たのでretry_countを戻す
             self.retry_count = 0
-            print('We have logged in as {0.user}'.format(client))
+            print("We have logged in as {0.user}".format(client))
 
         @client.event
         async def on_message(message):
@@ -87,15 +87,16 @@ class BotTask:
             body, reaction_flag = mg.make_command_message(
                 auther_menthon=message.author.mention,
                 test_flag=is_test_mode(),
-                content=content)
+                content=content,
+            )
             # 投稿文があれば投稿する
             if body != None:
                 message = await message.channel.send(body)
                 # リアクションを必要に応じて付ける
                 if reaction_flag:
-                    await message.add_reaction('👍')
-                    await message.add_reaction('🗑')
-                    await message.add_reaction('🆗')
+                    await message.add_reaction("👍")
+                    await message.add_reaction("🗑")
+                    await message.add_reaction("🆗")
 
         async def on_reaction_update(reaction, user):
             "リアクションが追加または削除されたときに呼ばれる"
@@ -115,11 +116,11 @@ class BotTask:
                 async for user in reaction.users():
                     if user != client.user:
                         # Bot以外
-                        if reaction.emoji == '👍':
+                        if reaction.emoji == "👍":
                             user_mentions.append(user.mention)
-                        elif reaction.emoji == '🗑':
+                        elif reaction.emoji == "🗑":
                             trash_user_mentions.append(user.mention)
-                        elif reaction.emoji == '🆗':
+                        elif reaction.emoji == "🆗":
                             ok_user_mentions.append(user.mention)
             # 編集後メッセージ作成
             edited = mg.make_reaction_update_message(
@@ -128,8 +129,9 @@ class BotTask:
                 user_mentions=user_mentions,
                 trash_user_mentions=trash_user_mentions,
                 ok_user_mentions=ok_user_mentions,
-                sep_flag=is_sep())
-            if edited == '':
+                sep_flag=is_sep(),
+            )
+            if edited == "":
                 # 削除する
                 await message.delete()
             elif edited != None:

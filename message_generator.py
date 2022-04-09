@@ -22,21 +22,26 @@ def make_command_message(test_flag, auther_menthon, content):
     """
     # コマンド名は本番とテストで違う
     if test_flag:
-        command = '/atumaru_test'
+        command = "/atumaru_test"
     else:
-        command = '/atumaru'
+        command = "/atumaru"
 
     # コマンドに対応したメッセージ
-    if content.startswith(command + ' '):
+    if content.startswith(command + " "):
         # 募集文掲載
-        recruiting = content[(len(command) + 1):]
+        recruiting = content[(len(command) + 1) :]
         # @everyoneを付ける
-        recruiting = '@everyone ' + recruiting
+        recruiting = "@everyone " + recruiting
         # テストモードの時は【テスト】を追加
         if test_flag:
             recruiting = TEST_TAG + recruiting
         body = "%s\n%s\n%s %s %s" % (
-            recruiting, BODY_TEXT_1, BODY_TEXT_2, auther_menthon, BODY_TEXT_3)
+            recruiting,
+            BODY_TEXT_1,
+            BODY_TEXT_2,
+            auther_menthon,
+            BODY_TEXT_3,
+        )
         return body, True
     elif content == command:
         # ヘルプ表示
@@ -51,14 +56,17 @@ def get_owner_mention(line):
     起案者 <@123> は🗑と🆗リアクションで削除出来ます。
     の<@123>の部分を抽出する
     """
-    return line[len(BODY_TEXT_2) + 1:-(len(BODY_TEXT_3) + 1)]
+    return line[len(BODY_TEXT_2) + 1 : -(len(BODY_TEXT_3) + 1)]
 
 
-def make_reaction_update_message(test_flag, content,
-                                 user_mentions,
-                                 trash_user_mentions,
-                                 ok_user_mentions,
-                                 sep_flag=False):
+def make_reaction_update_message(
+    test_flag,
+    content,
+    user_mentions,
+    trash_user_mentions,
+    ok_user_mentions,
+    sep_flag=False,
+):
     """
     Botの投稿メッセージに対するリアクションに反応して編集済みメッセージを作成する。
     contentは現在投稿メッセージ。user_mentionsは現在リアクションを付けたユーザのmention文字列一覧。

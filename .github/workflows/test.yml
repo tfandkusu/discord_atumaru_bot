@@ -27,5 +27,7 @@ jobs:
       - run: pip install poetry
       # ライブラリをインストールする
       - run: poetry install
+      # フォーマットを確認する
+      - run: poetry run black --check
       # 単体テストを実行する
       - run: poetry run python -m unittest
