@@ -29,5 +29,11 @@ jobs:
       - run: poetry install
       # フォーマットを確認する
       - run: poetry run black . --check
+      # lintをPRに投稿
+      - name: flake8 Lint
+        uses: py-actions/flake8@v2
+        with:
+          ignore: "E203"
+          max-line-length: "88"
       # 単体テストを実行する
       - run: poetry run python -m unittest
