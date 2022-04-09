@@ -29,5 +29,7 @@ jobs:
       - run: poetry install
       # フォーマットを確認する
       - run: poetry run black . --check
+      # lintを確認する
+      - run: poetry run pflake8
       # 単体テストを実行する
       - run: poetry run python -m unittest
