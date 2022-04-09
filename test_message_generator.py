@@ -5,8 +5,7 @@ import message_generator as mg
 class TestMessageGenerator(unittest.TestCase):
     def test_recruiting_prod(self):
         "本番モードで募集"
-        content, reaction = mg.make_command_message(
-            False, '<@123>', '/atumaru 募集します')
+        content, reaction = mg.make_command_message(False, "<@123>", "/atumaru 募集します")
         expected = """@everyone 募集します
 参加したい人は👍リアクションを付けてください。
 起案者 <@123> は🗑と🆗リアクションで削除出来ます。"""
@@ -15,15 +14,15 @@ class TestMessageGenerator(unittest.TestCase):
 
     def test_help_prod(self):
         "本番モードでヘルプ"
-        content, reaction = mg.make_command_message(
-            False, '<@123>', '/atumaru')
+        content, reaction = mg.make_command_message(False, "<@123>", "/atumaru")
         self.assertEqual(content, mg.HELP_MESSAGE)
         self.assertFalse(reaction)
 
     def test_recruiting_dev(self):
         "テストモードで募集"
         content, reaction = mg.make_command_message(
-            True, '<@123>', '/atumaru_test 募集します')
+            True, "<@123>", "/atumaru_test 募集します"
+        )
         expected = """【テスト】@everyone 募集します
 参加したい人は👍リアクションを付けてください。
 起案者 <@123> は🗑と🆗リアクションで削除出来ます。"""
@@ -32,15 +31,13 @@ class TestMessageGenerator(unittest.TestCase):
 
     def test_help_dev(self):
         "テストモードでヘルプ"
-        content, reaction = mg.make_command_message(
-            True, '<@123>', '/atumaru_test')
+        content, reaction = mg.make_command_message(True, "<@123>", "/atumaru_test")
         self.assertEqual(content, mg.HELP_MESSAGE)
         self.assertFalse(reaction)
 
     def test_not_command(self):
         "コマンドでないケース"
-        content, reaction = mg.make_command_message(
-            True, '<@123>', '/not_command')
+        content, reaction = mg.make_command_message(True, "<@123>", "/not_command")
         self.assertEqual(content, None)
         self.assertFalse(reaction)
 
@@ -72,7 +69,8 @@ class TestMessageGenerator(unittest.TestCase):
 <@1234>
 """
         edited = mg.make_reaction_update_message(
-            False, content, ["<@1234>", "<@5678>"], [], [])
+            False, content, ["<@1234>", "<@5678>"], [], []
+        )
         expected = """@everyone 募集文
 参加したい人は👍リアクションを付けてください。
 起案者 <@999> は🗑と🆗リアクションで削除出来ます。
@@ -94,7 +92,8 @@ class TestMessageGenerator(unittest.TestCase):
 """
         # 起案者と同じ人が🗑と🆗リアクションを付けた
         edited = mg.make_reaction_update_message(
-            False, content, ["<@1234>"], ["<@999>"], ["<@999>"])
+            False, content, ["<@1234>"], ["<@999>"], ["<@999>"]
+        )
         self.assertEqual(edited, "")
 
     def test_other_can_not_delete(self):
@@ -108,7 +107,8 @@ class TestMessageGenerator(unittest.TestCase):
 """
         # 起案者と同じ人が🗑と🆗リアクションを付けた
         edited = mg.make_reaction_update_message(
-            False, content, ["<@1234>"], ["<@888>"], ["<@888>"])
+            False, content, ["<@1234>"], ["<@888>"], ["<@888>"]
+        )
         # 編集後も変化無し
         self.assertEqual(edited, content)
 
@@ -125,9 +125,13 @@ class TestMessageGenerator(unittest.TestCase):
 <@4>
 """
         edited = mg.make_reaction_update_message(
-            False, content, ["<@1>", "<@2>", "<@3>", "<@4>", "<@5>"],
-            [], [],
-            sep_flag=True)
+            False,
+            content,
+            ["<@1>", "<@2>", "<@3>", "<@4>", "<@5>"],
+            [],
+            [],
+            sep_flag=True,
+        )
         expected = """@everyone 募集文
 参加したい人は👍リアクションを付けてください。
 起案者 <@999> は🗑と🆗リアクションで削除出来ます。
@@ -161,8 +165,13 @@ class TestMessageGenerator(unittest.TestCase):
 <@4>
 """
         edited = mg.make_reaction_update_message(
-            False, content, ["<@1>", "<@2>", "<@3>", "<@4>", "<@5>"], [], [],
-            sep_flag=False)
+            False,
+            content,
+            ["<@1>", "<@2>", "<@3>", "<@4>", "<@5>"],
+            [],
+            [],
+            sep_flag=False,
+        )
         expected = """@everyone 募集文
 参加したい人は👍リアクションを付けてください。
 起案者 <@999> は🗑と🆗リアクションで削除出来ます。
@@ -182,5 +191,5 @@ class TestMessageGenerator(unittest.TestCase):
         self.assertEqual(owner_mention, "<@999>")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
