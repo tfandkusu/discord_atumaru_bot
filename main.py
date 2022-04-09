@@ -10,7 +10,7 @@ ATUMARU_BOT_ENV_PROD = "prod"
 ATUMARU_BOT_ENV = os.environ["ATUMARU_BOT_ENV"]
 if ATUMARU_BOT_ENV != ATUMARU_BOT_ENV_DEV and ATUMARU_BOT_ENV != ATUMARU_BOT_ENV_PROD:
     raise "ATUMARU_BOT_ENV must be 'dev' or 'prod'"
-ATUMARU_BOT_SEP = os.environ.get("ATUMARU_BOT_SEP")
+ATUMARU_BOT_SEP = os.environ.get('ATUMARU_BOT_SEP')
 
 
 def is_test_mode():
