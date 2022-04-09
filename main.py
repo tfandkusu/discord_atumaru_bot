@@ -90,7 +90,7 @@ class BotTask:
                 content=content,
             )
             # 投稿文があれば投稿する
-            if body != None:
+            if body is not None:
                 message = await message.channel.send(body)
                 # リアクションを必要に応じて付ける
                 if reaction_flag:
@@ -134,7 +134,7 @@ class BotTask:
             if edited == "":
                 # 削除する
                 await message.delete()
-            elif edited != None:
+            elif edited is not None:
                 # メッセージを編集する
                 await message.edit(content=edited)
 

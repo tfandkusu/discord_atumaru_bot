@@ -81,12 +81,12 @@ def make_reaction_update_message(
     # 【テスト】と付いているメッセージに対して
     if content.startswith(TEST_TAG):
         # 本番環境
-        if test_flag == False:
+        if test_flag is False:
             return None
     # 【テスト】と付いてないメッセージに対して
-    if content.startswith(TEST_TAG) == False:
+    if content.startswith(TEST_TAG) is False:
         # 本番環境で無い
-        if test_flag == True:
+        if test_flag is True:
             return None
     # 編集後のメッセージ文字列を生成して
     lines = content.splitlines()
